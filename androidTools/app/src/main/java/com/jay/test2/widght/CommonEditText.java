@@ -1,4 +1,4 @@
-package com.jay.test2;
+package com.jay.test2.widght;
 
 
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
+
+import com.jay.test2.R;
 
 public class CommonEditText extends EditText {
 

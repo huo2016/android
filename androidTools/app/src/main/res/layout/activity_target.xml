@@ -7,22 +7,11 @@
     android:orientation="vertical"
     tools:context=".TargetActivity">
 
-    <com.jay.test2.CommonEditText
-        android:id="@+id/edit"
+    <Button
+        android:id="@+id/btn_edit"
+        android:text="自定义EditText"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:background="@null"
-        android:hint="请输入搜索字"
-        app:funcType="canClear" />
-
-    <com.jay.test2.CommonEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="自带查看密码功能"
-        android:inputType="textPassword"
-        app:funcType="canWatchPwd" />
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

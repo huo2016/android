@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditActivity">
+
+    <com.jay.test2.widght.CommonEditText
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:hint="请输入搜索字"
+        app:funcType="canClear" />
+
+    <com.jay.test2.widght.CommonEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="自带查看密码功能"
+        android:inputType="textPassword"
+        app:funcType="canWatchPwd" />
+
+</LinearLayout>
