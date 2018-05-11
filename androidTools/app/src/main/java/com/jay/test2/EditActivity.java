@@ -6,7 +6,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.jay.test2.widght.CommonEditText;
+import com.jay.test2.view.CommonEditText;
 
 public class EditActivity extends AppCompatActivity {
 

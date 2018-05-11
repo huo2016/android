@@ -1,4 +1,4 @@
-package com.jay.test2.widght;
+package com.jay.test2.view;
 
 
 import android.content.Context;
@@ -15,6 +15,9 @@ import android.widget.EditText;
 
 import com.jay.test2.R;
 
+/**
+ * 自定义带有清除功能的EditText
+ */
 public class CommonEditText extends EditText {
 
 
@@ -101,11 +104,11 @@ public class CommonEditText extends EditText {
 
     public CommonEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        ta = context.obtainStyledAttributes(attrs, R.styleable.PowerfulEditText);
+        ta = context.obtainStyledAttributes(attrs, R.styleable.CommonEditText);
 
-        funcType = ta.getInt(R.styleable.PowerfulEditText_funcType, TYPE_NORMAL);
-        eyeCloseResourseId = ta.getInt(R.styleable.PowerfulEditText_eyeClose, R.mipmap.eye_close);
-        eyeOpenResourseId = ta.getInt(R.styleable.PowerfulEditText_eyeOpen, R.mipmap.eye_open);
+        funcType = ta.getInt(R.styleable.CommonEditText_funcType, TYPE_NORMAL);
+        eyeCloseResourseId = ta.getInt(R.styleable.CommonEditText_eyeClose, R.mipmap.eye_close);
+        eyeOpenResourseId = ta.getInt(R.styleable.CommonEditText_eyeOpen, R.mipmap.eye_open);
 
         //自己的操作逻辑
         init();
@@ -131,14 +134,14 @@ public class CommonEditText extends EditText {
 
 
         if (leftDrawable != null) {
-            leftWidth = ta.getDimensionPixelOffset(R.styleable.PowerfulEditText_leftDrawableWidth, leftDrawable.getIntrinsicWidth());
-            leftHeight = ta.getDimensionPixelOffset(R.styleable.PowerfulEditText_leftDrawableHeight, leftDrawable.getIntrinsicHeight());
+            leftWidth = ta.getDimensionPixelOffset(R.styleable.CommonEditText_leftDrawableWidth, leftDrawable.getIntrinsicWidth());
+            leftHeight = ta.getDimensionPixelOffset(R.styleable.CommonEditText_leftDrawableHeight, leftDrawable.getIntrinsicHeight());
             leftDrawable.setBounds(0, 0, leftWidth, leftHeight);
         }
 
         if (mRightDrawable != null) {
-            rightWidth = ta.getDimensionPixelOffset(R.styleable.PowerfulEditText_rightDrawableWidth, mRightDrawable.getIntrinsicWidth());
-            rightHeight = ta.getDimensionPixelOffset(R.styleable.PowerfulEditText_rightDrawableHeight, mRightDrawable.getIntrinsicHeight());
+            rightWidth = ta.getDimensionPixelOffset(R.styleable.CommonEditText_rightDrawableWidth, mRightDrawable.getIntrinsicWidth());
+            rightHeight = ta.getDimensionPixelOffset(R.styleable.CommonEditText_rightDrawableHeight, mRightDrawable.getIntrinsicHeight());
             mRightDrawable.setBounds(0, 0, rightWidth, rightHeight);
             if (mEyeOpenDrawable != null) {
                 mEyeOpenDrawable.setBounds(0, 0, rightWidth, rightHeight);
