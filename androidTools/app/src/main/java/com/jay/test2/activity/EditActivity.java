@@ -1,4 +1,4 @@
-package com.jay.test2;
+package com.jay.test2.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.jay.test2.R;
 import com.jay.test2.view.CommonEditText;
 
 public class EditActivity extends AppCompatActivity {

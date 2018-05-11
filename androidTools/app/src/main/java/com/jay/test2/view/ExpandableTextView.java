@@ -4,9 +4,11 @@ package com.jay.test2.view;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -16,6 +18,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -99,6 +102,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         init(attrs);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public ExpandableTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
@@ -322,6 +326,46 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         }
     }
 
+
+    /**
+     * 设置内容
+     * @param text
+     */
+    public void setText( CharSequence text) {
+        mRelayout = true;
+        mTvContent.setText(text);
+        setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * 设置内容，列表情况下，带有保存位置收起/展开状态
+     * @param text
+     * @param position
+     */
+    public void setText( CharSequence text,int position) {
+        mPosition = position;
+        //获取状态，如无，默认是true:收起
+        mCollapsed = mCollapsedStatus.get(position, true);
+        clearAnimation();
+        //设置收起/展开图标和文字
+        setDrawbleAndText();
+        mTvExpandCollapse.setText(mCollapsed ? getResources().getString(R.string.expand) : getResources().getString(R.string.collapse));
+
+        setText(text);
+        getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        requestLayout();
+    }
+
+    /**
+     * 获取内容
+     * @return
+     */
+    public CharSequence getText() {
+        if (mTvContent == null) {
+            return "";
+        }
+        return mTvContent.getText();
+    }
 
     /**
      * 获取内容tv真实高度（含padding）
