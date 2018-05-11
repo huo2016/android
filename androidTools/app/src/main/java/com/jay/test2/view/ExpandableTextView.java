@@ -1,6 +1,8 @@
 package com.jay.test2.view;
 
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +14,7 @@ import android.util.AttributeSet;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -170,11 +173,185 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     private void findView() {
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.item_expand_collapse,this);
+        inflater.inflate(R.layout.item_expand_collapse, this);
+
+        mTvContent = findViewById(R.id.expandable_text);
+        mTvContent.setOnClickListener(this);
+        mTvExpandCollapse = findViewById(R.id.expand_collapse);
+        setDrawbleAndText();
+        mTvExpandCollapse.setOnClickListener(this);
+
+        mTvContent.setTextColor(contentTextColor);
+        mTvContent.getPaint().setTextSize(contentTextSize);
+
+        mTvExpandCollapse.setTextColor(collapseExpandTextColor);
+        mTvExpandCollapse.getPaint().setTextSize(collapseExpandTextSize);
+
+        //设置收起展开位置：左或者右
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.gravity = grarity;
+        mTvExpandCollapse.setLayoutParams(lp);
+    }
+
+    private void setDrawbleAndText() {
+        if (Gravity.LEFT == drawableGrarity) {
+            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(mCollapsed ? mCollapseDrawable : mExpandDrawable, null, null, null);
+        } else {
+            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(null, null, mCollapsed ? mCollapseDrawable : mExpandDrawable, null);
+        }
+        mTvExpandCollapse.setText(mCollapsed ? getResources().getString(R.string.expand) : getResources().getString(R.string.collapse));
     }
 
     @Override
     public void onClick(View v) {
 
+        if (mTvExpandCollapse.getVisibility() != View.VISIBLE) {
+            return;
+        }
+        mCollapsed = !mCollapsed; //展开状态置反
+
+        setDrawbleAndText(); //修改收起/展开图标、文字
+
+        //保存位置状态
+        if (mCollapsedStatus!=null){
+            mCollapsedStatus.put(mPosition,mCollapsed);
+        }
+
+        // 执行展开/收起动画
+        mAnimating = true;
+        ValueAnimator valueAnimator;
+        if (mCollapsed) {
+//            mTvContent.setMaxLines(mMaxCollapsedLines);
+            valueAnimator = new ValueAnimator().ofInt(getHeight(), mCollapsedHeight);
+        } else {
+            mCollapsedHeight = getHeight();
+            valueAnimator = new ValueAnimator().ofInt(getHeight(), getHeight() +
+                    mTextHeightWithMaxLines - mTvContent.getHeight());
+        }
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int animatedValue = (int) valueAnimator.getAnimatedValue();
+                mTvContent.setMaxHeight(animatedValue - mMarginBetweenTxtAndBottom);
+                getLayoutParams().height = animatedValue;
+                requestLayout();
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                // 动画结束后发送结束的信号
+                /// clear the animation flag
+                mAnimating = false;
+                // notify the listener
+                if (mListener != null) {
+                    mListener.onExpandStateChanged(mTvContent, !mCollapsed);
+                }
+            }
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        valueAnimator.setDuration(mAnimationDuration);
+        valueAnimator.start();
+    }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // 当动画还在执行状态时，拦截事件，不让child处理
+        return mAnimating;
+    }
+    /**
+     * 重新测量
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // If no change, measure and return
+        if (!mRelayout || getVisibility() == View.GONE) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
+        }
+        mRelayout = false;
+
+        // Setup with optimistic case
+        // i.e. Everything fits. No button needed
+        mTvExpandCollapse.setVisibility(View.GONE);
+        mTvContent.setMaxLines(Integer.MAX_VALUE);
+
+        // Measure
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        //如果内容真实行数小于等于最大行数，不处理
+        if (mTvContent.getLineCount() <= mMaxCollapsedLines) {
+            return;
+        }
+        // 获取内容tv真实高度（含padding）
+        mTextHeightWithMaxLines = getRealTextViewHeight(mTvContent);
+
+        // 如果是收起状态，重新设置最大行数
+        if (mCollapsed) {
+            mTvContent.setMaxLines(mMaxCollapsedLines);
+        }
+        mTvExpandCollapse.setVisibility(View.VISIBLE);
+
+        // Re-measure with new setup
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        if (mCollapsed) {
+            // Gets the margin between the TextView's bottom and the ViewGroup's bottom
+            mTvContent.post(new Runnable() {
+                @Override
+                public void run() {
+                    mMarginBetweenTxtAndBottom = getHeight() - mTvContent.getHeight();
+                }
+            });
+            // 保存这个容器的测量高度
+            mCollapsedHeight = getMeasuredHeight();
+        }
+    }
+
+
+    /**
+     * 获取内容tv真实高度（含padding）
+     * @param textView
+     * @return
+     */
+    private static int getRealTextViewHeight( TextView textView) {
+        int textHeight = textView.getLayout().getLineTop(textView.getLineCount());
+        int padding = textView.getCompoundPaddingTop() + textView.getCompoundPaddingBottom();
+        return textHeight + padding;
+    }
+
+
+    /**
+     * 设置收起/展开监听
+     * @param listener
+     */
+    public void setOnExpandStateChangeListener( OnExpandStateChangeListener listener) {
+        mListener = listener;
+    }
+
+
+    /**
+     * 定义状态改变接口
+     */
+    public interface OnExpandStateChangeListener {
+        /**
+         * @param textView   - TextView being expanded/collapsed
+         * @param isExpanded - true if the TextView has been expanded
+         */
+        void onExpandStateChanged(TextView textView, boolean isExpanded);
     }
 }
