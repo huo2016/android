@@ -57,6 +57,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     private boolean mAnimating;
     /* 展开收起状态回调 */
     private OnExpandStateChangeListener mListener;
+
     /* listview等列表情况下保存每个item的收起/展开状态 */
     private SparseBooleanArray mCollapsedStatus;
     /* 列表位置 */
