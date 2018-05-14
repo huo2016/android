@@ -23,17 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jay.test2.R;
+import com.jay.test2.util.UIUtils;
 
 /**
  * 自定义可折叠的TextView
  */
 public class ExpandableTextView extends LinearLayout implements View.OnClickListener {
-
     /* 默认最高行数 */
-    private static final int MAX_COLLAPSED_LINES = 5;
+    private final int MAX_COLLAPSED_LINES = 5;
 
     /* 默认动画执行时间 */
-    private static final int DEFAULT_ANIM_DURATION = 200;
+    private final int DEFAULT_ANIM_DURATION = 200;
 
     /*内容textview*/
     protected AlignTextView mTvContent;
@@ -97,24 +97,30 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         this(context, null);
     }
 
-    public ExpandableTextView(Context context, @Nullable AttributeSet attrs) {
+    public ExpandableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public ExpandableTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public ExpandableTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         init(attrs);
     }
 
+    @Override
+    public void setOrientation(int orientation) {
+        if (LinearLayout.HORIZONTAL == orientation) {
+            throw new IllegalArgumentException("ExpandableTextView only supports Vertical Orientation.");
+        }
+        super.setOrientation(orientation);
+    }
 
     /**
      * 初始化属性
      *
      * @param attrs
      */
-    @SuppressLint("ResourceAsColor")
     private void init(AttributeSet attrs) {
         mCollapsedStatus = new SparseBooleanArray();
 
@@ -130,58 +136,51 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         if (mExpandDrawable == null) {
             mExpandDrawable = ContextCompat.getDrawable(getContext(), R.mipmap.icon_orange_arrow_up);
         }
-
         if (mCollapseDrawable == null) {
             mCollapseDrawable = ContextCompat.getDrawable(getContext(), R.mipmap.icon_orange_arrow_down);
         }
 
         if (TextUtils.isEmpty(textCollapse)) {
-            textCollapse = "收起";
+            textCollapse = getContext().getString(R.string.collapse);
         }
-
         if (TextUtils.isEmpty(textExpand)) {
-            textExpand = "展开";
+            textExpand = getContext().getString(R.string.expand);
         }
+        contentTextColor = typedArray.getColor(R.styleable.ExpandableTextView_contentTextColor, ContextCompat.getColor(getContext(), R.color.color3));
+        contentTextSize = typedArray.getDimension(R.styleable.ExpandableTextView_contentTextSize, UIUtils.sp2px(getContext(), 14));
 
-        contentTextColor = typedArray.getColor(R.styleable.ExpandableTextView_contentTextColor, R.color.color3);
-        contentTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_contentTextSize, 14);
-
-        collapseExpandTextColor = typedArray.getColor(R.styleable.ExpandableTextView_collapseExpandTextColor, R.color.main_color);
-        collapseExpandTextSize = typedArray.getDimensionPixelSize(R.styleable.ExpandableTextView_collapseExpandTextSize, 15);
+        collapseExpandTextColor = typedArray.getColor(R.styleable.ExpandableTextView_collapseExpandTextColor, ContextCompat.getColor(getContext(), R.color.main_color));
+        collapseExpandTextSize = typedArray.getDimension(R.styleable.ExpandableTextView_collapseExpandTextSize, UIUtils.sp2px(getContext(), 14));
 
         grarity = typedArray.getInt(R.styleable.ExpandableTextView_collapseExpandGrarity, Gravity.LEFT);
         drawableGrarity = typedArray.getInt(R.styleable.ExpandableTextView_drawableGrarity, Gravity.RIGHT);
 
-        typedArray.recycle(); //用完记得释放，避免泄露
-
+        typedArray.recycle();
+        // enforces vertical orientation
         setOrientation(LinearLayout.VERTICAL);
-
+        // default visibility is gone
         setVisibility(GONE);
     }
 
-    @Override
-    public void setOrientation(int orientation) {
-        if (orientation == LinearLayout.HORIZONTAL) {
-            throw new IllegalArgumentException("the ExpandableTextView only support the LinearLayout.VERTICAL");
-        }
-        super.setOrientation(orientation);
-    }
-
-
+    /**
+     * 渲染完成时初始化view
+     */
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        findView();
+        findViews();
     }
 
-    private void findView() {
+    /**
+     * 初始化viwe
+     */
+    private void findViews() {
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.item_expand_collapse, this);
-
-        mTvContent = findViewById(R.id.expandable_text);
+        mTvContent = (AlignTextView) findViewById(R.id.expandable_text);
         mTvContent.setOnClickListener(this);
-        mTvExpandCollapse = findViewById(R.id.expand_collapse);
+        mTvExpandCollapse = (TextView) findViewById(R.id.expand_collapse);
         setDrawbleAndText();
         mTvExpandCollapse.setOnClickListener(this);
 
@@ -197,30 +196,23 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         mTvExpandCollapse.setLayoutParams(lp);
     }
 
-    private void setDrawbleAndText() {
-        if (Gravity.LEFT == drawableGrarity) {
-            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(mCollapsed ? mCollapseDrawable : mExpandDrawable, null, null, null);
-        } else {
-            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(null, null, mCollapsed ? mCollapseDrawable : mExpandDrawable, null);
-        }
-        mTvExpandCollapse.setText(mCollapsed ? getResources().getString(R.string.expand) : getResources().getString(R.string.collapse));
-    }
-
+    /**
+     * 点击事件
+     *
+     * @param view
+     */
     @Override
-    public void onClick(View v) {
-
+    public void onClick(View view) {
         if (mTvExpandCollapse.getVisibility() != View.VISIBLE) {
             return;
         }
-        mCollapsed = !mCollapsed; //展开状态置反
-
-        setDrawbleAndText(); //修改收起/展开图标、文字
-
+        mCollapsed = !mCollapsed;
+        //修改收起/展开图标、文字
+        setDrawbleAndText();
         //保存位置状态
-        if (mCollapsedStatus!=null){
-            mCollapsedStatus.put(mPosition,mCollapsed);
+        if (mCollapsedStatus != null) {
+            mCollapsedStatus.put(mPosition, mCollapsed);
         }
-
         // 执行展开/收起动画
         mAnimating = true;
         ValueAnimator valueAnimator;
@@ -232,7 +224,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
             valueAnimator = new ValueAnimator().ofInt(getHeight(), getHeight() +
                     mTextHeightWithMaxLines - mTvContent.getHeight());
         }
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int animatedValue = (int) valueAnimator.getAnimatedValue();
@@ -246,6 +238,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
             public void onAnimationStart(Animator animator) {
 
             }
+
             @Override
             public void onAnimationEnd(Animator animator) {
                 // 动画结束后发送结束的信号
@@ -256,10 +249,12 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
                     mListener.onExpandStateChanged(mTvContent, !mCollapsed);
                 }
             }
+
             @Override
             public void onAnimationCancel(Animator animator) {
 
             }
+
             @Override
             public void onAnimationRepeat(Animator animator) {
 
@@ -269,14 +264,15 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         valueAnimator.start();
     }
 
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         // 当动画还在执行状态时，拦截事件，不让child处理
         return mAnimating;
     }
+
     /**
      * 重新测量
+     *
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */
@@ -326,12 +322,48 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         }
     }
 
+    /**
+     * 获取内容tv真实高度（含padding）
+     *
+     * @param textView
+     * @return
+     */
+    private static int getRealTextViewHeight(TextView textView) {
+        int textHeight = textView.getLayout().getLineTop(textView.getLineCount());
+        int padding = textView.getCompoundPaddingTop() + textView.getCompoundPaddingBottom();
+        return textHeight + padding;
+    }
+
+    /**
+     * 设置收起展开图标位置和文字
+     */
+    private void setDrawbleAndText() {
+        if (Gravity.LEFT == drawableGrarity) {
+            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(mCollapsed ? mCollapseDrawable : mExpandDrawable, null, null, null);
+        } else {
+            mTvExpandCollapse.setCompoundDrawablesWithIntrinsicBounds(null, null, mCollapsed ? mCollapseDrawable : mExpandDrawable, null);
+        }
+        mTvExpandCollapse.setText(mCollapsed ? getResources().getString(R.string.expand) : getResources().getString(R.string.collapse));
+    }
+
+
+    /*********暴露给外部调用方法***********/
+
+    /**
+     * 设置收起/展开监听
+     *
+     * @param listener
+     */
+    public void setOnExpandStateChangeListener(OnExpandStateChangeListener listener) {
+        mListener = listener;
+    }
 
     /**
      * 设置内容
+     *
      * @param text
      */
-    public void setText( CharSequence text) {
+    public void setText(CharSequence text) {
         mRelayout = true;
         mTvContent.setText(text);
         setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
@@ -339,10 +371,11 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     /**
      * 设置内容，列表情况下，带有保存位置收起/展开状态
+     *
      * @param text
      * @param position
      */
-    public void setText( CharSequence text,int position) {
+    public void setText(CharSequence text, int position) {
         mPosition = position;
         //获取状态，如无，默认是true:收起
         mCollapsed = mCollapsedStatus.get(position, true);
@@ -358,6 +391,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     /**
      * 获取内容
+     *
      * @return
      */
     public CharSequence getText() {
@@ -366,27 +400,6 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         }
         return mTvContent.getText();
     }
-
-    /**
-     * 获取内容tv真实高度（含padding）
-     * @param textView
-     * @return
-     */
-    private static int getRealTextViewHeight( TextView textView) {
-        int textHeight = textView.getLayout().getLineTop(textView.getLineCount());
-        int padding = textView.getCompoundPaddingTop() + textView.getCompoundPaddingBottom();
-        return textHeight + padding;
-    }
-
-
-    /**
-     * 设置收起/展开监听
-     * @param listener
-     */
-    public void setOnExpandStateChangeListener( OnExpandStateChangeListener listener) {
-        mListener = listener;
-    }
-
 
     /**
      * 定义状态改变接口
