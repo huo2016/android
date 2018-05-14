@@ -9,6 +9,9 @@ import android.widget.Toast;
 import com.jay.test2.R;
 import com.jay.test2.view.CommonEditText;
 
+/**
+ * 自定义EditText实现内容删除，查看密码等功能
+ */
 public class EditActivity extends AppCompatActivity {
 
     @Override

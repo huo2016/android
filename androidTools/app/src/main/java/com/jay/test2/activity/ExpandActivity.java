@@ -6,6 +6,9 @@ import android.os.Bundle;
 import com.jay.test2.R;
 import com.jay.test2.view.ExpandableTextView;
 
+/**
+ * 可折叠的TextView,实现内容展开与折叠
+ */
 public class ExpandActivity extends AppCompatActivity {
 
     @Override
