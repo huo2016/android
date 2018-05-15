@@ -9,22 +9,28 @@
 
     <Button
         android:id="@+id/btn_edit"
-        android:text="自定义EditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="自定义EditText" />
 
 
     <Button
         android:id="@+id/btn_expand"
-        android:text="可折叠的TextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="可折叠的TextView" />
 
 
     <Button
         android:id="@+id/btn_animation"
-        android:text="快速部署动画"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="快速部署动画" />
+
+    <Button
+        android:id="@+id/btn_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="仿余额宝数字滚动效果" />
 
 </LinearLayout>
