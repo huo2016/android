@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".activity.ScannerActivity">
+
+    <Button
+        android:id="@+id/btn_start"
+        android:text="开始扫描"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:text="结束扫描"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <com.jay.scanner.QRCodeView
+        android:id="@+id/qr_code_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:facing="back"
+        app:showSlider="true"
+        app:sliderColor="@android:color/holo_green_dark"
+        app:showPoint="true"
+        app:pointColor="@color/colorAccent"
+        app:frameColor="@android:color/white"
+        app:showFrame="true"/>
+
+</LinearLayout>

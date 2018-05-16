@@ -1,1 +1,1 @@
-include ':app', ':moudle'
+include ':app', ':moudle', ':scanner'

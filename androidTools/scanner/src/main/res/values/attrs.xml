@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="QRCodeView">
+        <attr name="facing" format="enum">
+            <enum name="back" value="0" />
+            <enum name="front" value="1" />
+        </attr>
+        <attr name="showFrame" format="boolean"/>
+        <attr name="frameColor" format="color"/>
+        <attr name="showPoint" format="boolean"/>
+        <attr name="pointColor" format="boolean"/>
+        <attr name="sliderColor" format="color"/>
+        <attr name="showSlider" format="boolean"/>
+    </declare-styleable>
+</resources>

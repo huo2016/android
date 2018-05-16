@@ -20,6 +20,7 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_expand).setOnClickListener(this);
         findViewById(R.id.btn_animation).setOnClickListener(this);
         findViewById(R.id.btn_money).setOnClickListener(this);
+        findViewById(R.id.btn_scanner).setOnClickListener(this);
     }
 
     @Override
@@ -36,6 +37,9 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_money:
                 startActivity(new Intent(this,NumRunActivity.class));
+                break;
+            case R.id.btn_scanner:
+                startActivity(new Intent(this,ScannerActivity.class));
                 break;
             default:
                 break;
