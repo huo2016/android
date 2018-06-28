@@ -22,8 +22,6 @@
         <activity android:name=".activity.EditActivity" />
         <activity android:name=".activity.ExpandActivity" />
         <activity android:name=".activity.FastAnimationActivity" />
-
-
         <activity android:name=".activity.NumRunActivity" />
         <activity android:name=".activity.ScannerActivity" />
         <activity android:name=".activity.ShowQRCodeContentActivity" />
@@ -32,6 +30,8 @@
             android:name="android.max_aspect"
             android:value="2.1" />
 
+        <activity android:name=".activity.NoteActivity" />
+        <activity android:name=".activity.AidlActivity"/>
     </application>
 
 </manifest>
