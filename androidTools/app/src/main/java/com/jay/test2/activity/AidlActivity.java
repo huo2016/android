@@ -19,7 +19,7 @@ public class AidlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aidl);
         testView = findViewById(R.id.view);
-        mData=new ArrayList<>();
+        mData = new ArrayList<>();
         PieData data = new PieData("销售", 12);
         PieData data2 = new PieData("运维", 32);
         PieData data3 = new PieData("策划", 56);

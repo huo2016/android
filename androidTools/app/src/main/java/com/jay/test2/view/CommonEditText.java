@@ -1,6 +1,7 @@
 package com.jay.test2.view;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import com.jay.test2.R;
 /**
  * 自定义带有清除功能的EditText
  */
+@SuppressLint("AppCompatCustomView")
 public class CommonEditText extends EditText {
 
 

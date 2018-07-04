@@ -31,7 +31,8 @@
             android:value="2.1" />
 
         <activity android:name=".activity.NoteActivity" />
-        <activity android:name=".activity.AidlActivity"/>
+        <activity android:name=".activity.AidlActivity" />
+        <activity android:name=".activity.CheckViewActivity"></activity>
     </application>
 
 </manifest>

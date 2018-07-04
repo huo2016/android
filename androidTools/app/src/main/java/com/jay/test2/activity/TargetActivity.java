@@ -23,6 +23,7 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_scanner).setOnClickListener(this);
         findViewById(R.id.btn_note).setOnClickListener(this);
         findViewById(R.id.btn_view).setOnClickListener(this);
+        findViewById(R.id.btn_bitmap).setOnClickListener(this);
     }
 
     @Override
@@ -48,6 +49,9 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_view:
                 startActivity(new Intent(this,AidlActivity.class));
+                break;
+            case R.id.btn_bitmap:
+                startActivity(new Intent(this,CheckViewActivity.class));
                 break;
             default:
                 break;
