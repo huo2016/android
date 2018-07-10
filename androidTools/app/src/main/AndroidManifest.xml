@@ -32,7 +32,10 @@
 
         <activity android:name=".activity.NoteActivity" />
         <activity android:name=".activity.AidlActivity" />
-        <activity android:name=".activity.CheckViewActivity"></activity>
+        <activity android:name=".activity.CheckViewActivity" />
+        <activity android:name=".activity.LineToActivity" />
+        <activity android:name=".activity.CwActivity" />
+        <activity android:name=".activity.ArcActivity"></activity>
     </application>
 
 </manifest>

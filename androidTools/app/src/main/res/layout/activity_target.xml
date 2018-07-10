@@ -67,6 +67,25 @@
                 android:text="自定义view之drawBitmap" />
 
 
+            <Button
+                android:id="@+id/btn_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="自定义view之Path(lineto)" />
+
+
+            <Button
+                android:id="@+id/btn_direction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="自定义view之Path(方向)" />
+
+            <Button
+                android:id="@+id/btn_arc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="自定义view之Path(addArc)" />
+
         </LinearLayout>
     </ScrollView>
 
