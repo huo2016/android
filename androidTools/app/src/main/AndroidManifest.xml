@@ -35,7 +35,8 @@
         <activity android:name=".activity.CheckViewActivity" />
         <activity android:name=".activity.LineToActivity" />
         <activity android:name=".activity.CwActivity" />
-        <activity android:name=".activity.ArcActivity"></activity>
+        <activity android:name=".activity.ArcActivity" />
+        <activity android:name=".activity.CobWebViewActivity" />
     </application>
 
 </manifest>

@@ -27,6 +27,7 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_path).setOnClickListener(this);
         findViewById(R.id.btn_direction).setOnClickListener(this);
         findViewById(R.id.btn_arc).setOnClickListener(this);
+        findViewById(R.id.btn_cob).setOnClickListener(this);
     }
 
     @Override
@@ -65,10 +66,12 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_arc:
                 startActivity(new Intent(this, ArcActivity.class));
                 break;
+            case R.id.btn_cob:
+                startActivity(new Intent(this, CobWebViewActivity.class));
+                break;
             default:
                 break;
         }
     }
-
 
 }

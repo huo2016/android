@@ -23,7 +23,6 @@ public class ArcView extends View {
 
     }
 
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -45,8 +44,8 @@ public class ArcView extends View {
         Path path = new Path();
         path.lineTo(100, 100);
 
-        RectF rectF = new RectF(0,0,300,300);
-        path.addArc(rectF,0,270);
-        canvas.drawPath(path,paint);
+        RectF rectF = new RectF(0, 0, 300, 300);
+        path.addArc(rectF, 0, 270);
+        canvas.drawPath(path, paint);
     }
 }
