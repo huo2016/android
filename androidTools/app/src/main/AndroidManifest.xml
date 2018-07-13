@@ -37,6 +37,7 @@
         <activity android:name=".activity.CwActivity" />
         <activity android:name=".activity.ArcActivity" />
         <activity android:name=".activity.CobWebViewActivity" />
+        <activity android:name=".activity.BezierActivity"></activity>
     </application>
 
 </manifest>

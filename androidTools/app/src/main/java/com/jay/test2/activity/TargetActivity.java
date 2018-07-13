@@ -28,6 +28,7 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_direction).setOnClickListener(this);
         findViewById(R.id.btn_arc).setOnClickListener(this);
         findViewById(R.id.btn_cob).setOnClickListener(this);
+        findViewById(R.id.btn_bezier).setOnClickListener(this);
     }
 
     @Override
@@ -68,6 +69,9 @@ public class TargetActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_cob:
                 startActivity(new Intent(this, CobWebViewActivity.class));
+                break;
+            case R.id.btn_bezier:
+                startActivity(new Intent(this, BezierActivity.class));
                 break;
             default:
                 break;
