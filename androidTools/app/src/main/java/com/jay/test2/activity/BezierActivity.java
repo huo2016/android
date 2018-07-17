@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.jay.test2.R;
 import com.jay.test2.view.Bezier;
 import com.jay.test2.view.Bezier2;
+import com.jay.test2.view.Bezier3;
 
 public class BezierActivity extends AppCompatActivity {
 
@@ -16,5 +17,6 @@ public class BezierActivity extends AppCompatActivity {
 
         Bezier bezier = findViewById(R.id.bezier);
         Bezier2 bezier2 = findViewById(R.id.bezier2);
+        Bezier3 bezier3 = findViewById(R.id.bezier3);
     }
 }
