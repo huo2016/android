@@ -37,7 +37,18 @@
         <activity android:name=".activity.CwActivity" />
         <activity android:name=".activity.ArcActivity" />
         <activity android:name=".activity.CobWebViewActivity" />
-        <activity android:name=".activity.BezierActivity"></activity>
+        <activity android:name=".activity.BezierActivity" />
+        <activity android:name=".activity.BroadCastActivity" />
+
+        <receiver android:name=".activity.BroadCastActivity$MyReceiver">
+            <intent-filter>
+                <action android:name="android.test.broad" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        >
+        <activity android:name=".animation.ViewAnimationActivity"></activity>
     </application>
 
 </manifest>
